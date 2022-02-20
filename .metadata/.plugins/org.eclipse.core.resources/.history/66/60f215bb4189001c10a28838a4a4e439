@@ -1,0 +1,64 @@
+package application;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
+
+import entities.ImportedProduct;
+import entities.Product;
+import entities.UsedProduct;
+
+public class Program {
+
+	public static void main(String[] args) {
+		Locale.setDefault(Locale.US);
+		Scanner sc = new Scanner(System.in);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		List<Product> list = new ArrayList<>();
+		
+		System.out.println("Informe a quantidade de produtos: ");
+		int p = sc.nextInt();
+		
+		for (int i=1; i<=p; i++) {
+			
+			System.out.println("Produto #"+i);
+			System.out.print("Comum, usado ou importado (c/u/i)");
+			char t = sc.next().charAt(0);
+			
+			if (t != 'c' && t != 'u' && t != 'i') {
+				System.out.println("Valor ivalido.");
+				i -= 1;
+				continue ;				
+			}
+			
+			System.out.print("Nome: ");
+			sc.nextLine();
+			String name = sc.nextLine();
+			
+			System.out.print("Valor: ");
+			double price = sc.nextDouble();
+			
+			switch (t) {
+			case 'c':
+				list.add(new Product(name, price));
+				
+			case 'u':
+				System.out.print("Data de fabricação DD/MM/AAAA: ");
+				Date manufactureDate = sdf.parse(sc.next());
+				list.add(new UsedProduct(name, price, manufactureDate));
+				
+			case 'i':
+				System.out.print("Taxa de importação: ");
+				double customFee = sc.nextDouble();
+				list.add(new ImportedProduct(name, price, customFee));
+			}			
+		}
+		
+		sc.close();
+	}
+
+}
